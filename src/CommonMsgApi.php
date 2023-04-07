@@ -68,7 +68,7 @@ class CommonMsgApi
             'customData'=>$customData,
             'sendUsrPwd'=>$sendUsrPwd?$sendUsrPwd:'',
         ];
-        return $this->http($this->ips,'/wsClient/push',$params);
+        return $this->http($this->ips,'/wsClient/push',$params,$this->requestCode,$this->token);
     }
 
     /**
@@ -107,7 +107,7 @@ class CommonMsgApi
         {
             $params['pageSize']=$pageSize;
         }
-        return $this->http($this->ips,'/im-msg/page',$params);
+        return $this->http($this->ips,'/im-msg/page',$params,$this->requestCode,$this->token);
     }
 
     /**
@@ -123,7 +123,7 @@ class CommonMsgApi
         {
             $params['msgIds']=$msgIds;
         }
-        return $this->http($this->ips,'/im-msg/setRead',$params);
+        return $this->http($this->ips,'/im-msg/setRead',$params,$this->requestCode,$this->token);
     }
 
     /**
@@ -134,7 +134,7 @@ class CommonMsgApi
      */
     public function detail(int $msgId)
     {
-        return $this->http($this->ips,'/im-msg/details',['msgId'=>$msgId]);
+        return $this->http($this->ips,'/im-msg/details',['msgId'=>$msgId],$this->requestCode,$this->token);
     }
 
     /**
@@ -144,7 +144,7 @@ class CommonMsgApi
      */
     public function contactAll()
     {
-        return $this->http($this->ips,'/im-contact/list',[]);
+        return $this->http($this->ips,'/im-contact/list',[],$this->requestCode,$this->token);
     }
 
     /**
@@ -154,7 +154,7 @@ class CommonMsgApi
      */
     public function contactMsgStatistics()
     {
-        return $this->http($this->ips,'/im-contact/msgStatistics',[]);
+        return $this->http($this->ips,'/im-contact/msgStatistics',[],$this->requestCode,$this->token);
     }
 
 
@@ -163,10 +163,12 @@ class CommonMsgApi
      * @param array $ips
      * @param string $uri
      * @param array $params
+     * @param string $requestCode
+     * @param string $token
      * @return Result
      * @throws GuzzleException
      */
-    public  function http(array $ips,string $uri,array $params=[]):Result
+    public static  function http(array $ips,string $uri,array $params=[],string $requestCode='',string $token=''):Result
     {
         try {
             $ip=$ips[array_rand($ips)];
@@ -174,7 +176,7 @@ class CommonMsgApi
             {
                 $ip='http://'.$ip;
             }
-            $response=(new Client())->post($ip.$uri,['form_params'=>$params,'headers'=>['token'=>$this->token,'request-code'=>$this->requestCode]]);
+            $response=(new Client())->post($ip.$uri,['form_params'=>$params,'headers'=>['token'=>$token,'request-code'=>$requestCode]]);
 
             $res=$response->getBody()->getContents();
 
