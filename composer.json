@@ -1,0 +1,16 @@
+{
+    "name": "dxkjcomposer/commsgapi",
+    "require": {
+        "guzzlehttp/guzzle": "^7.5"
+    },
+    "autoload": {
+        "psr-4": {
+            "Dxkjcomposer\\Commsgapi\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "dxcomposer"
+        }
+    ]
+}
