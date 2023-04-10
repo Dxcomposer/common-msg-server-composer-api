@@ -33,7 +33,7 @@ class CommonMsgApi
 
         if(class_exists(\Hyperf\Context\Context::class))
         {
-            $this->requestCode=\Hyperf\Context\Context::get('request-code');
+            $this->requestCode=\Hyperf\Context\Context::get('request-code','');
         }
     }
 
