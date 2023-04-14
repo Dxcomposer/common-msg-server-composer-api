@@ -79,10 +79,11 @@ class CommonMsgApi
      * @param array $msgType IM消息类型
      * @param int $read 0未读 1已读
      * @param int $pageSize 每页数量
+     * @param array $other
      * @return Result
      * @throws GuzzleException
      */
-    public  function page(int $lastId, string $friendUsername='', array $customType = [], array $msgType = [], int $read = -1, int $pageSize = 10):Result
+    public  function page(int $lastId, string $friendUsername='', array $customType = [], array $msgType = [], int $read = -1, int $pageSize = 10,array $other=[]):Result
     {
         $params=[
             'lastId'=>$lastId,
@@ -107,6 +108,12 @@ class CommonMsgApi
         {
             $params['pageSize']=$pageSize;
         }
+
+        if($other)
+        {
+            $params=array_merge($params,$other);
+        }
+
         return $this->http($this->ips,'/im-msg/page',$params,$this->requestCode,$this->token);
     }
 
