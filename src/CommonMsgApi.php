@@ -80,75 +80,36 @@ class CommonMsgApi
 
     /**
      * 消息列表
-     * @param int $lastId 上一次最大的id
-     * @param string $friendUsername 好友账号
-     * @param array $customType 项目自定义消息类型
-     * @param array $msgType IM消息类型
-     * @param int $read 0未读 1已读
-     * @param int $pageSize 每页数量
-     * @param array $other
+     * @param array $params
      * @return Result
      * @throws GuzzleException
      */
-    public  function page(int $lastId, string $friendUsername='', array $customType = [], array $msgType = [], int $read = -1, int $pageSize = 10,array $other=[]):Result
+    public  function page(array $params):Result
     {
-        $params=[
-            'lastId'=>$lastId,
-        ];
-        if($friendUsername)
-        {
-            $params['friendUsername']=$friendUsername;
-        }
-        if($customType)
-        {
-            $params['customType']=$customType;
-        }
-        if($msgType)
-        {
-            $params['msgType']=$msgType;
-        }
-        if($read!=-1)
-        {
-            $params['read']=$read;
-        }
-        if($pageSize)
-        {
-            $params['pageSize']=$pageSize;
-        }
-
-        if($other)
-        {
-            $params=array_merge($params,$other);
-        }
-
         return $this->http($this->ips,'/im-msg/page',$params,$this->requestCode,$this->token);
     }
 
     /**
      * 设置已读
-     * @param array $msgIds 不传代表所有设置已读
+     * @param array $params
      * @return Result
      * @throws GuzzleException
      */
-    public function setRead(array $msgIds=[])
+    public function setRead(array $params=[])
     {
-        $params=[];
-        if($msgIds)
-        {
-            $params['msgIds']=$msgIds;
-        }
+
         return $this->http($this->ips,'/im-msg/setRead',$params,$this->requestCode,$this->token);
     }
 
     /**
      * 消息详情 （我发的和我接收的）
-     * @param int $msgId
+     * @param array $params
      * @return Result
      * @throws GuzzleException
      */
-    public function detail(int $msgId)
+    public function detail(array $params)
     {
-        return $this->http($this->ips,'/im-msg/details',['msgId'=>$msgId],$this->requestCode,$this->token);
+        return $this->http($this->ips,'/im-msg/details',$params,$this->requestCode,$this->token);
     }
 
     /**
