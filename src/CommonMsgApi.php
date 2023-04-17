@@ -43,19 +43,20 @@ class CommonMsgApi
      * @param array $to 收信方Im账号
      * @param array $msgBody 消息体 至少包含消息内容 ['content'=>'消息体']
      * @param string $customType 项目自定义消息类型
+     * @param array $customData 消息自定义参数
      * @param string $msgType IM消息类型
      *  const IM_MSG_SYS='M0000';   // 系统消息 需要提示切写入消息记录
      * const IM_MSG_PERSON='M0001'; // 私聊消息 需要提示切写入消息记录
      * const IM_MSG_GROUP='M0002'; // 群聊消息 需要提示切写入消息记录
      * const IM_MSG_OPTION='M0003'; // 前后端操作通知 静默操作
      * const IM_MSG_HEARTBEAT='M9999'; // 前端心跳消息通知
-     * @param array $customData 消息自定义参数
      * @param string $source 发送来源
      * @param string $sendUsrPwd 发送方Im账号密码 不传使用默认
+     * @param array $other
      * @return Result
      * @throws GuzzleException
      */
-    public  function push(string $sendUsername,array $to,array $msgBody,string $customType='',array $customData=[],string $msgType='M0000',string $source='sys',string $sendUsrPwd=''):Result
+    public  function push(string $sendUsername,array $to,array $msgBody,string $customType='',array $customData=[],string $msgType='M0000',string $source='sys',string $sendUsrPwd='',array $other=[]):Result
     {
         $params=[
             'to'=>array_unique($to),
@@ -68,6 +69,12 @@ class CommonMsgApi
             'customData'=>$customData,
             'sendUsrPwd'=>$sendUsrPwd?$sendUsrPwd:'',
         ];
+
+        if($other)
+        {
+            $params=array_merge($params,$other);
+        }
+
         return $this->http($this->ips,'/wsClient/push',$params,$this->requestCode,$this->token);
     }
 
@@ -146,22 +153,24 @@ class CommonMsgApi
 
     /**
      * 联系人
+     * @param array $params
      * @return Result
      * @throws GuzzleException
      */
-    public function contactAll()
+    public function contactAll(array $params)
     {
-        return $this->http($this->ips,'/im-contact/list',[],$this->requestCode,$this->token);
+        return $this->http($this->ips,'/im-contact/list',$params,$this->requestCode,$this->token);
     }
 
     /**
      * 联系人和消息统计
+     * @param array $params
      * @return Result
      * @throws GuzzleException
      */
-    public function contactMsgStatistics()
+    public function contactMsgStatistics(array $params=[])
     {
-        return $this->http($this->ips,'/im-contact/msgStatistics',[],$this->requestCode,$this->token);
+        return $this->http($this->ips,'/im-contact/msgStatistics',$params,$this->requestCode,$this->token);
     }
 
 
